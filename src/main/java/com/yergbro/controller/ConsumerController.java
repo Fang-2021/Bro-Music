@@ -34,7 +34,8 @@ public class ConsumerController {
     public class MyPicConfig implements WebMvcConfigurer{
         @Override
         public void addResourceHandlers(ResourceHandlerRegistry registry){
-            registry.addResourceHandler("/avatarImages/**").addResourceLocations("file:D:/MyIDEAFreeFile/bro-music/avatarImages/");
+//            registry.addResourceHandler("/avatarImages/**").addResourceLocations("file:D:/MyIDEAFreeFile/bro-music/avatarImages/");
+            registry.addResourceHandler("/avatarImages/**").addResourceLocations("file:" +"./avatarImages/");
         }
     }
     //添加用户
@@ -98,6 +99,7 @@ public class ConsumerController {
         if(res){
             jsonObject.put("code",1);
             jsonObject.put("msg","注册成功");
+            jsonObject.put("userMsg",consumerService.getUserByUsername(username));
             return jsonObject;
         }else {
             jsonObject.put("code",0);

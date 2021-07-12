@@ -26,7 +26,7 @@ public class SongListController {
     public class MyPicConfig implements WebMvcConfigurer{
         @Override
         public void addResourceHandlers(ResourceHandlerRegistry registry) {
-            registry.addResourceHandler("/img/songListPic/**").addResourceLocations("file:D:/MyIDEAFreeFile/bro-music/img/songListPic/");
+            registry.addResourceHandler("/img/songListPic/**").addResourceLocations("file:"+"./img/songListPic/");
         }
     }
 
@@ -123,32 +123,32 @@ public class SongListController {
     //修改歌单封面
     @ResponseBody
     @RequestMapping(value = "/songList/updatePic",method = RequestMethod.POST)
-    public Object updateSongListPic(@RequestParam("urlFile")MultipartFile urlFile,@RequestParam("id")int id){
+    public Object updateSongListPic(@RequestParam("file")MultipartFile file,@RequestParam("id")int id){
         JSONObject jsonObject = new JSONObject();
-        if(urlFile.isEmpty()){
+        if(file.isEmpty()){
             jsonObject.put("code",0);
             jsonObject.put("msg","文件为空");
             return  jsonObject;
         }
-        String fileName = System.currentTimeMillis() + urlFile.getOriginalFilename();
+        String fileName = System.currentTimeMillis() + file.getOriginalFilename();
         String filePath = System.getProperty("user.dir") + System.getProperty("file.separator") + "img" + System.getProperty("file.separator") + "songListPic";
         File file1 = new File(filePath);
         if(!file1.exists()){
             file1.mkdir();
         }
-        File dest = new File(filePath + System.getProperty("separator") + fileName);
-        String storeAvatorPath= "/img/songListPic/"+fileName;
+        File dest = new File(filePath + System.getProperty("file.separator") + fileName);
+        String storeAvatarPath= "/img/songListPic/"+fileName;
 
         try {
-            urlFile.transferTo(dest);
+            file.transferTo(dest);
             SongList songList = new SongList();
             songList.setId(id);
-            songList.setPic(storeAvatorPath);
+            songList.setPic(storeAvatarPath);
             boolean res = songListService.updateSongListImg(songList);
             if(res){
                 jsonObject.put("code",1);
                 jsonObject.put("msg","上传成功");
-                jsonObject.put("avatar",storeAvatorPath);
+                jsonObject.put("avatar",storeAvatarPath);
                 return jsonObject;
             }else {
                 jsonObject.put("code",0);
