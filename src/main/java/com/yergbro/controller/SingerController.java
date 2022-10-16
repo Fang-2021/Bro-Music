@@ -2,7 +2,11 @@ package com.yergbro.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.yergbro.domain.Singer;
+import com.yergbro.domain.Song;
+import com.yergbro.service.SongService;
 import com.yergbro.service.imp.SingerServiceImpl;
+import com.yergbro.service.imp.SongServiceImpl;
+import org.omg.PortableInterceptor.Interceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Controller;
@@ -18,6 +22,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 @RestController
 @Controller
@@ -25,7 +30,8 @@ import java.util.Date;
 public class SingerController {
 @Autowired
     private SingerServiceImpl singerService;
-
+@Autowired
+    private SongServiceImpl songService;
 @Configuration
     public class  MyPicConfig implements WebMvcConfigurer{
         @Override
@@ -95,7 +101,12 @@ public class SingerController {
     public Object deleteSinger(HttpServletRequest req){
 
         String id = req.getParameter("id").trim();
-        return singerService.deleteSingerByID(Integer.parseInt(id));
+        List<Song> songs = songService.songOfSingerId(Integer.parseInt(id));
+        if(songs.size()>0){
+            return false;
+        }
+        else
+            return singerService.deleteSingerByID(Integer.parseInt(id));
     }
 
     //更新歌手

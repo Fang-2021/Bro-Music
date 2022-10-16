@@ -36,9 +36,9 @@ public class SongController {
 @Bean
     public MultipartConfigElement multipartConfigElement(){
     MultipartConfigFactory factory= new MultipartConfigFactory();
-    //最大文件10M
+    //最大文件50M
     factory.setMaxFileSize(DataSize.of(50, DataUnit.MEGABYTES));
-    //上传数据最大10M
+    //上传数据最大50M
     factory.setMaxRequestSize(DataSize.of(50,DataUnit.MEGABYTES));
     return factory.createMultipartConfig();
     }

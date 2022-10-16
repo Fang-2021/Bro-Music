@@ -42,18 +42,18 @@ class BroMusicApplicationTests {
     private SongListServiceImpl songListService;
     @Test
 public void ConsumerTest(){
-    Consumer consumer = new Consumer();
-    consumer.setUsername("你的汉王");
-    consumer.setPassword("123456");
-    consumer.setSex(new Byte("1"));
-    consumer.setPhoneNum("11111111");
-    consumer.setEmail("1111111@qq.com");
-    consumer.setBirth(new Date());
-    consumer.setIntroduction("woshishei");
-    consumer.setLocation("hangzhou");
-    consumer.setAvatar("/img/user.jpg");
-    consumer.setCreateTime(new Date());
-    consumer.setUpdateTime(new Date());
+//    Consumer consumer = new Consumer();
+//    consumer.setUsername("你的汉王");
+//    consumer.setPassword("123456");
+//    consumer.setSex(new Byte("1"));
+//    consumer.setPhoneNum("11111111");
+//    consumer.setEmail("1111111@qq.com");
+//    consumer.setBirth(new Date());
+//    consumer.setIntroduction("woshishei");
+//    consumer.setLocation("hangzhou");
+//    consumer.setAvatar("/img/user.jpg");
+//    consumer.setCreateTime(new Date());
+//    consumer.setUpdateTime(new Date());
    // consumerService.updateUserMsg(consumer);
 //    List<Consumer> list=consumerService.allUser();
 //    System.out.println("=====================");
@@ -62,8 +62,9 @@ public void ConsumerTest(){
 //    }
 //    System.out.println(    consumerService.getUserByUsername("yoona"));
 //    System.out.println("=====================");
-consumerService.addUser(consumer);
-}
+        List<Consumer> userByID = consumerService.getUserByID(59);
+        System.out.println(userByID.get(0));
+    }
 
     @Test
     public void AdminTest(){
