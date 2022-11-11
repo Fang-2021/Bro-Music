@@ -42,75 +42,85 @@ public class ConsumerController {
             registry.addResourceHandler("/avatarImages/**").addResourceLocations("file:" +"./avatarImages/");
         }
     }
-        //添加用户
-        @ResponseBody
-        @RequestMapping(value = "/user/add",method = RequestMethod.POST)
-        public Object addUser(HttpServletRequest req){
-            JSONObject jsonObject = new JSONObject();
-            String username = req.getParameter("username").trim();
-            String password = req.getParameter("password").trim();
-            String sex = req.getParameter("sex").trim();
-            String phone_num = req.getParameter("phone_num").trim();
-            String email = req.getParameter("email").trim();
-            String birth = req.getParameter("birth").trim();
-            String introduction = req.getParameter("introduction").trim();
-            String location = req.getParameter("location").trim();
-            String avatar = req.getParameter("avatar").trim();
-            List<Consumer> userByUsername = consumerService.getUserByUsername(username);
-            if(userByUsername.size()>0){
-                jsonObject.put("code",2);
-                jsonObject.put("msg","用户名已存在");
-                return jsonObject;
-            }
-            if(username.equals("")||username==null){
-                jsonObject.put("code",0);
-                jsonObject.put("msg","用户名或密码错误");
-                return jsonObject;
-            }
-            Consumer consumer = new Consumer();
-            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            Date myBirth = new Date();
+    //添加用户
+    @ResponseBody
+    @RequestMapping(value = "/user/add",method = RequestMethod.POST)
+    public Object addUser(HttpServletRequest req){
+        JSONObject jsonObject = new JSONObject();
+        String username = req.getParameter("username").trim();
+        String password = req.getParameter("password").trim();
+        String sex = req.getParameter("sex").trim();
+        String phone_num = req.getParameter("phone_num").trim();
+        String email = req.getParameter("email").trim();
+        String birth = req.getParameter("birth").trim();
+        String introduction = req.getParameter("introduction").trim();
+        String location = req.getParameter("location").trim();
+        String avatar = req.getParameter("avatar").trim();
+        List<Consumer> userByUsername = consumerService.getUserByUsername(username);
 
-            try {
-                myBirth=dateFormat.parse(birth);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-            consumer.setUsername(username);
-            consumer.setPassword(password);
-            consumer.setSex(new Byte(sex));
-
-            if(phone_num.equals("")){
-                consumer.setPhoneNum(null);
-            }else{
-                consumer.setPhoneNum(phone_num);
-            }
-            if(email.equals("")){
-                consumer.setEmail(null);
-            }else{
-                consumer.setEmail(email);
-            }
-
-            consumer.setBirth(myBirth);
-            consumer.setIntroduction(introduction);
-            consumer.setLocation(location);
-            consumer.setAvatar(avatar);
-            consumer.setCreateTime(new Date());
-            consumer.setUpdateTime(new Date());
-
-            boolean res = consumerService.addUser(consumer);
-
-            if(res){
-                jsonObject.put("code",1);
-                jsonObject.put("msg","注册成功");
-                jsonObject.put("userMsg",consumerService.getUserByUsername(username));
-                return jsonObject;
-            }else {
-                jsonObject.put("code",0);
-                jsonObject.put("msg","注册失败");
-                return jsonObject;
-            }
+        if(userByUsername.size()>0){
+            jsonObject.put("code",2);
+            jsonObject.put("msg","用户名已存在");
+            return jsonObject;
         }
+        if(username.equals("")||username==null){
+            jsonObject.put("code",0);
+            jsonObject.put("msg","用户名错误");
+            return jsonObject;
+        }
+        if(password.equals("")||password==null){
+            jsonObject.put("code",0);
+            jsonObject.put("msg","密码错误");
+            return jsonObject;
+        }
+        Consumer consumer = new Consumer();
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date myBirth = new Date();
+        try {
+            myBirth=dateFormat.parse(birth);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        consumer.setUsername(username);
+        consumer.setPassword(password);
+        if(sex.equals("")){
+            consumer.setSex(new Byte("1"));//默认为男
+        }else{
+            consumer.setSex(new Byte(sex));
+        }
+        if(phone_num.equals("")){
+            consumer.setPhoneNum(null);
+        }else{
+            consumer.setPhoneNum(phone_num);
+        }
+        if(email.equals("")){
+            consumer.setEmail(null);
+        }else{
+            consumer.setEmail(email);
+        }
+//            consumer.setPhoneNum(phone_num);
+//            consumer.setEmail(email);
+
+        consumer.setBirth(myBirth);
+        consumer.setIntroduction(introduction);
+        consumer.setLocation(location);
+        consumer.setAvatar(avatar);
+        consumer.setCreateTime(new Date());
+        consumer.setUpdateTime(new Date());
+
+        boolean res = consumerService.addUser(consumer);
+
+        if(res){
+            jsonObject.put("code",1);
+            jsonObject.put("msg","注册成功");
+            jsonObject.put("userMsg",consumerService.getUserByUsername(username));
+            return jsonObject;
+        }else {
+            jsonObject.put("code",0);
+            jsonObject.put("msg","注册失败");
+            return jsonObject;
+        }
+    }
 
 
     //判断是否登陆成功

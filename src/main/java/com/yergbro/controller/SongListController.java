@@ -38,7 +38,11 @@ public class SongListController {
         String pic = req.getParameter("pic").trim();
         String introduction = req.getParameter("introduction").trim();
         String style = req.getParameter("style").trim();
-
+        if(title.equals("")||title==null){
+            jsonObject.put("code",0);
+            jsonObject.put("msg","标题错误");
+            return jsonObject;
+        }
         SongList songList = new SongList();
         songList.setTitle(title);
         songList.setPic(pic);

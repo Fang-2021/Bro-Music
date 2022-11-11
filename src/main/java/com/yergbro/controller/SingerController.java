@@ -51,10 +51,25 @@ public class SingerController {
         String location = req.getParameter("location");
         String introduction = req.getParameter("introduction");
         String birth = req.getParameter("birth");
+        List<Singer> singers = singerService.singerOfName(name);
 
+        if(singers.size()>0){
+            jsonObject.put("code",2);
+            jsonObject.put("msg","歌手已存在");
+            return jsonObject;
+        }
+        if(name.equals("")||name==null){
+            jsonObject.put("code",0);
+            jsonObject.put("msg","姓名不能为空");
+            return jsonObject;
+        }
         Singer singer = new Singer();
         singer.setName(name);
-        singer.setSex(new Byte(sex));
+        if(sex.equals("")){
+            singer.setSex(new Byte("1"));//默认为男
+        }else{
+            singer.setSex(new Byte(sex));
+        }
         singer.setPic(pic);
         singer.setLocation(location);
         singer.setIntroduction(introduction);
@@ -66,6 +81,7 @@ public class SingerController {
             e.printStackTrace();
         }
         singer.setBirth(myBirth);
+
         boolean res = singerService.addSinger(singer);
         if(res){
             jsonObject.put("code",1);
